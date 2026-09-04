@@ -1,0 +1,201 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing basic account info and preferences",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The user's unique identifier matching auth.uid",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 256
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 120
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "User profile photo URL",
+          "maxLength": 512
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account creation ISO timestamp or server timestamp"
+        }
+      },
+      "required": ["userId", "email"]
+    },
+    "ServiceInquiry": {
+      "title": "ServiceInquiry",
+      "description": "Client order or inquiry for custom chatbots or website services",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique inquiry ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The client user ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "serviceType": {
+          "type": "string",
+          "description": "Selected service type: chatbot_model, custom_website, full_solution, or ai_consultation",
+          "maxLength": 64
+        },
+        "projectTitle": {
+          "type": "string",
+          "description": "Title or summary of the client's project",
+          "maxLength": 150
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed project requirements and objectives",
+          "maxLength": 3000
+        },
+        "budgetRange": {
+          "type": "string",
+          "description": "Estimated budget tier",
+          "maxLength": 64
+        },
+        "timeline": {
+          "type": "string",
+          "description": "Expected timeframe for launch",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "description": "Inquiry status: submitted, reviewing, in_progress, completed, cancelled",
+          "maxLength": 32,
+          "enum": ["submitted", "reviewing", "in_progress", "completed", "cancelled"]
+        },
+        "aiProposal": {
+          "type": "string",
+          "description": "Optional AI-generated scope or architecture proposal",
+          "maxLength": 5000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Submission timestamp"
+        }
+      },
+      "required": ["id", "userId", "serviceType", "projectTitle", "description", "status"]
+    },
+    "SavedModel": {
+      "title": "SavedModel",
+      "description": "A chatbot model or digital service saved to user favorites",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Saved model record ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "modelId": {
+          "type": "string",
+          "description": "Identifier of the chatbot model (e.g. omni-support-v2)",
+          "maxLength": 64
+        },
+        "modelName": {
+          "type": "string",
+          "description": "Name of the chatbot model",
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "description": "Category tag",
+          "maxLength": 64
+        },
+        "priceMonthly": {
+          "type": "number",
+          "description": "Price per month or flat cost"
+        },
+        "savedAt": {
+          "type": "string",
+          "description": "Timestamp when saved"
+        }
+      },
+      "required": ["id", "userId", "modelId", "modelName"]
+    },
+    "ChatTranscript": {
+      "title": "ChatTranscript",
+      "description": "Saved chat session transcript with the AI agency consultant or model",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique session ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "modelName": {
+          "type": "string",
+          "description": "Chatbot model or persona used",
+          "maxLength": 100
+        },
+        "title": {
+          "type": "string",
+          "description": "Chat transcript title or first prompt preview",
+          "maxLength": 150
+        },
+        "messageCount": {
+          "type": "number",
+          "description": "Total messages in conversation"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief summary of conversation",
+          "maxLength": 1000
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["id", "userId", "modelName", "title", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document. Only the authenticated owner can read or write their profile."
+    },
+    "/users/{userId}/inquiries/{inquiryId}": {
+      "schema": "ServiceInquiry",
+      "description": "Service inquiries and chatbot model orders submitted by the user."
+    },
+    "/users/{userId}/savedModels/{modelId}": {
+      "schema": "SavedModel",
+      "description": "User saved and favorite chatbot models."
+    },
+    "/users/{userId}/chatHistory/{chatId}": {
+      "schema": "ChatTranscript",
+      "description": "User saved consultation and chatbot test transcripts."
+    }
+  }
+}

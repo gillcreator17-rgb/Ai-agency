@@ -1,0 +1,7 @@
+{
+  "name": "AI Chatbot Agency",
+  "description": "Premier AI agency offering custom AI chatbot models, intelligent agents, bespoke website design, and end-to-end digital engineering services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
